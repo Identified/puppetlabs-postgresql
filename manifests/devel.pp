@@ -24,4 +24,12 @@ class postgresql::devel(
     name   => $package_name,
     tag    => 'postgresql',
   }
+
+  if $::osfamily == 'Debian' {
+    # Debian packages separate their front/backend C libraries...
+    package { "postgresql-server-dev-${postgresql::params::version}":
+      ensure  => $package_ensure,
+      require => Package['postgresql-devel'],
+    }
+  }
 }
